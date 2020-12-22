@@ -1,0 +1,12 @@
+FROM golang:rc-alpine3.12 AS builder
+RUN mkdir -p /workspace/src/project
+WORKDIR /workspace/src/project
+ADD . /workspace/src/project
+
+RUN cd /workspace/src/project && go build hello.go
+
+FROM scratch
+WORKDIR /app
+COPY --from=builder /workspace/src/project/hello .
+
+CMD ["./hello"]
